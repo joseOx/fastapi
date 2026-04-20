@@ -16,7 +16,8 @@ app.include_router(tasks.router)
 
 @app.get("/",tags=["Root"])
 async def read_root():
-    return {"message": "Welcome to the Task Manager API"}
+    return {"message": "API funcionando con estructura de Routers"}
+
 
 # @app.get("/tasks", tags=["Tasks"])
 # async def get_tasks():
