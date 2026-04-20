@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from app.routers import tasks
+from .routers import tasks
+from .database import SessionLocal, engine, Base
 
 #Instancio la aplicacion con metadatos
 app = FastAPI(
@@ -25,3 +26,7 @@ async def read_root():
 # async def create_task(task:Task):
 #     tasks_db.append(task)
 #     return {"message":"Task created successfully"}
+
+
+# Crea las tablas si no existen
+Base.metadata.create_all(bind=engine)

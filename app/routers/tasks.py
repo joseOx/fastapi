@@ -1,8 +1,11 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional
+from sqlalchemy.orm import Session
+from ..database import get_db
+from .. import models
 
-#Creo el rooter
+#Creo el router
 router = APIRouter(
     prefix="/tasks",
     tags=["Tasks"]
@@ -13,14 +16,14 @@ class Task(BaseModel):
     title:str
     is_completed: bool = False
 
-#Base de datos temporal
-tasks_db = ["holi"]
-
 @router.get("/")
-async def get_all_tasks():
-    return tasks_db
+async def read_tasks(db: Session = Depends(get_db)):
+    return db.query(models.Task).all()
 
 @router.post("/")
-async def create_task(task: Task):
-    tasks_db.append(task)
-    return {"message":"Tarea agregada con router","task":task}
+async def create_task(title: str , description: str, db: Session = Depends(get_db)):
+    new_task = models.Task(title=title, description=description)
+    db.add(new_task)
+    db.commit()
+    db.refresh(new_task)
+    return {"message":"Tarea agregada con router","task": new_task}
