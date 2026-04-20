@@ -17,7 +17,7 @@ class Task(BaseModel):
     is_completed: bool = False
 
 #base de datos temporal(de prueba)
-tasks_db = []
+tasks_db = ["holi"]
 
 #Mis primeros endpoints
 
